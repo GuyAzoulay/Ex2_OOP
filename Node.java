@@ -4,13 +4,12 @@ import java.util.HashMap;
 
 public class Node implements NodeData{
     int key;
-    int tag;
+    private int tag;
     GeoLocation g1;
     private String info;
 
-    public Node(int key, int tag, GeoLocation g1) {
+    public Node(int key, GeoLocation g1) {
         this.key = key;
-        this.tag = tag;
         this.g1 = g1;
 
     }
@@ -52,5 +51,12 @@ public class Node implements NodeData{
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Node{" +
+                "key=" + key +
+                ", g1=" + g1 +
+                '\'' +
+                '}';
+    }
 }

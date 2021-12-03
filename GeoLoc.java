@@ -2,7 +2,7 @@ package api;
 
 public class GeoLoc implements GeoLocation {
     double x,y,z;
-    GeoLoc(int x,int y,int z){
+    GeoLoc(double x,double y,double z){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -24,5 +24,14 @@ public class GeoLoc implements GeoLocation {
         double ny= Math.pow(this.y-g.y(),2);
         double nz= Math.pow(this.z-g.z(),2);
         return Math.sqrt(nx+ny+nz);
+    }
+
+    @Override
+    public String toString() {
+        return
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

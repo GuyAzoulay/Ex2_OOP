@@ -5,10 +5,9 @@ public class Edges implements EdgeData{
     double weight;
     private String info;
 
-    public Edges(int src, int dest, int tag, double weight) {
+    public Edges(int src, int dest, double weight) {
         this.src = src;
         this.dest = dest;
-        this.tag = tag;
         this.weight = weight;
 
     }
@@ -39,5 +38,15 @@ public class Edges implements EdgeData{
 
     public void setTag(int t) {
         this.tag=t;
+    }
+
+    @Override
+    public String toString() {
+        return "Edges{" +
+                "src=" + this.src +
+                ", dest=" + this.dest +
+                ", weight=" + this.weight +
+                 '\'' +
+                '}';
     }
 }
