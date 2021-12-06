@@ -2,10 +2,8 @@ package api;
 
 import java.awt.*;
 import java.lang.invoke.CallSite;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 public class check {
     public static void main(String[] args) {
@@ -14,11 +12,24 @@ public class check {
         HashMap<Integer, HashSet<Integer>> intome= new HashMap<>();
         DirectedG g = new DirectedG();
         DirectedGAlgo algo= new DirectedGAlgo();
-        algo.load("src/main/resources/data/G1.json");
+        algo.load("G1.json");
 //        System.out.println(algo.g1.nodeSize());
 //        System.out.println(algo.getGraph().edgeSize());
-       System.out.println(algo.getGraph().getEdge(15,16));
-        System.out.println(algo.shortestPathDist(0,11));
+//        System.out.println(algo.getGraph().getEdge(15,16));
+//        System.out.println(algo.shortestPathDist(2,12));
+//        System.out.println(algo.shortestPath(2,12));
+        TreeMap<Double, Integer> tree_map = new TreeMap<Double, Integer>();
+        tree_map.put(0.5,0);
+        tree_map.put(0.1,1);
+        tree_map.put(8.9,4);
+        tree_map.put(7.1,2);
+        tree_map.put(6.1,3);
+        System.out.println(tree_map.lastEntry());
+        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
+        ans.put(tree_map.lastEntry().getKey(),tree_map.lastEntry().getValue());
+        ans.put(0.5,1);
+        System.out.println(ans.firstEntry());
+        System.out.println(algo.center());
 //       // algo.getGraph().removeNode(6);
 //        algo.getGraph().removeNode(7);
 //        System.out.println(algo.getGraph().edgeSize());

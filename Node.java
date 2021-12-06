@@ -8,6 +8,7 @@ public class Node implements NodeData, Comparable<Node>{
     GeoLocation g1;
     private String info;
     private double weight;
+    private int prev_Node;
 
     public Node(int key, GeoLocation g1) {
         this.key = key;
@@ -15,6 +16,12 @@ public class Node implements NodeData, Comparable<Node>{
 
     }
 
+    public void set_Prev(int t){
+        this.prev_Node = t;
+    }
+    public int get_Prev(){
+       return this.prev_Node;
+    }
     public int getKey() {
         return this.key;
     }

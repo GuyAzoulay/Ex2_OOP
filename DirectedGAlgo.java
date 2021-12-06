@@ -35,18 +35,31 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             for (NodeData n2:this.g1.vertix.values()) {
                 if(n2.getTag()==0) return false;
             }
-          SetTag0();
+            SetTag0();
         }
 
         return true;
     }
 
+    private void creat_list(int src , int dest){
+        int curr = Integer.MAX_VALUE;
+        this.shortestPath = new LinkedList<>();
+        this.shortestPath.add(new Node(this.g1.vertix.get(dest).getKey(),this.g1.vertix.get(dest).getLocation()));
+        while(dest!=src){
+            NodeData temp = this.g1.vertix.get(dest);
+            curr = temp.get_Prev();
+            this.shortestPath.add(new Node(this.g1.vertix.get(curr).getKey(),this.g1.vertix.get(curr).getLocation()));
+            dest = curr;
+        }
+    }
+
     @Override
     public double shortestPathDist(int src, int dest) {
-        if (!isConnected()) return -1.0;
+     //   if (!isConnected()) return -1.0;
         HashSet<Integer> helper = new HashSet<>();
         PriorityQueue<NodeData> queue= new PriorityQueue<>();
         Dijkstra(queue,helper,src,dest);
+        creat_list(src,dest);
         return g1.vertix.get(dest).getWeight();
 
     }
@@ -73,21 +86,25 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     private void All_Neighbers(int t,PriorityQueue<NodeData> queue, HashSet<Integer> helper,int dest) {
         double weight_val=-1;
         double new_weight=-1;
+        int curr ;
         for (EdgeData e : this.g1.edges.get(t).values()) {
             if (!helper.contains(e.getDest()) && e.getDest() != dest ){
-
                 weight_val=e.getWeight();
                 new_weight= weight_val + this.g1.vertix.get(t).getWeight();
+                curr = t;
                 if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
+                    this.g1.vertix.get(e.getDest()).set_Prev(curr);
                 }
                 queue.add(new Node(e.getDest(),g1.vertix.get(e.getDest()).getLocation()));
             }
             if (e.getDest()==dest){
                 weight_val=e.getWeight();
                 new_weight = weight_val + this.g1.vertix.get(t).getWeight();
+                curr = t;
                 if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
+                    this.g1.vertix.get(e.getDest()).set_Prev(curr);
                 }
 
             }
@@ -96,7 +113,11 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
 
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
-        return null;
+        if(this.shortestPath!=null){
+            this.shortestPath = new LinkedList<>();
+        }
+        shortestPathDist(src,dest);
+        return this.shortestPath;
     }
 
     @Override

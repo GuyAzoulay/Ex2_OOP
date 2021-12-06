@@ -51,6 +51,7 @@ public interface NodeData {
 	 * @param t - the new value of the tag
 	 */
 	public void setTag(int t);
-
+	public void set_Prev(int t);
+	public int get_Prev();
     int compareTo(Node node);
 }
