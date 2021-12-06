@@ -2,11 +2,12 @@ package api;
 
 import java.util.HashMap;
 
-public class Node implements NodeData{
+public class Node implements NodeData, Comparable<Node>{
     int key;
     private int tag;
     GeoLocation g1;
     private String info;
+    private double weight;
 
     public Node(int key, GeoLocation g1) {
         this.key = key;
@@ -27,11 +28,10 @@ public class Node implements NodeData{
     }
 
     public double getWeight() {
-        return 0;
+        return this.weight;
     }
 
-    public void setWeight(double w) {
-        return;
+    public void setWeight(double w) {this.weight=w;
     }
 
     public String getInfo() {
@@ -58,5 +58,16 @@ public class Node implements NodeData{
                 ", g1=" + g1 +
                 '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Node node) {
+
+        if (this.getWeight() < node.getWeight()) return 1;
+
+        if (this.getWeight() > node.getWeight()) return 0;
+
+        return -1;
+
     }
 }

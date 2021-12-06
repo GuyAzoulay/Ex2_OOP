@@ -7,9 +7,10 @@ public class DirectedG implements DirectedWeightedGraph{
     HashMap<Integer,NodeData> vertix;
     HashMap<Integer,HashMap<Integer,EdgeData>> edges; // First Integer is src second Integer is dest
     HashMap<Integer,HashSet<Integer>> intoNode;
+
     private int edgescount = 0;
 
-    public DirectedG(HashMap<Integer, NodeData> vertix, HashMap<Integer,HashMap<Integer,EdgeData>> edges, HashMap<Integer,HashSet<Integer>> intoNode) {
+    public DirectedG() {
         this.vertix = new HashMap<Integer, NodeData>();
         this.edges = new HashMap<Integer, HashMap<Integer,EdgeData>>();
         this.intoNode = new HashMap<Integer,HashSet<Integer>>();
@@ -68,13 +69,19 @@ public class DirectedG implements DirectedWeightedGraph{
 
     public NodeData removeNode(int key) {
         if (this.vertix.containsKey(key)){
-            int edgeToDel=this.edges.get(key).size();   //number of all the edges which connect to nose
+            NodeData n= this.vertix.get(key);
+            int edgeToDel=this.edges.get(key).size()+this.intoNode.get(key).size();   //number of all the edges which connect to nose
+            this.vertix.remove(key);
             this.edgescount-=edgeToDel;
-            this.edges.get(key).clear();
+            for (Integer e : intoNode.get(key)){
+                if (this.edges.get(e) != null) this.edges.get(e).remove(key);
+                removeEdge(e,key);
+            }
+            this.edges.remove(key);
             this.intoNode.get(key).clear();
-            System.out.println();
+            this.intoNode.remove(key);
             MC++;
-            return this.vertix.remove(key);
+            return n;
         }
         else {
             System.out.println("No such key: "+ key);
