@@ -64,22 +64,31 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
 
             if (helper.contains(t)) continue;
             helper.add(t);
-            All_Neighbers(t,queue,helper);
+
+            All_Neighbers(t,queue,helper,dest);
         }
 
     }
 
-    private void All_Neighbers(int t,PriorityQueue<NodeData> queue, HashSet<Integer> helper) {
+    private void All_Neighbers(int t,PriorityQueue<NodeData> queue, HashSet<Integer> helper,int dest) {
         double weight_val=-1;
         double new_weight=-1;
         for (EdgeData e : this.g1.edges.get(t).values()) {
-            if (!helper.contains(e.getDest())){
+            if (!helper.contains(e.getDest()) && e.getDest() != dest ){
+
                 weight_val=e.getWeight();
                 new_weight= weight_val + this.g1.vertix.get(t).getWeight();
                 if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
                 }
                 queue.add(new Node(e.getDest(),g1.vertix.get(e.getDest()).getLocation()));
+            }
+            if (e.getDest()==dest){
+                weight_val=e.getWeight();
+                new_weight = weight_val + this.g1.vertix.get(t).getWeight();
+                if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
+                    this.g1.vertix.get(e.getDest()).setWeight(new_weight);
+                }
 
             }
         }
