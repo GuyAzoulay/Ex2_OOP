@@ -50,7 +50,9 @@ public class check {
 //        tree_map.put(6.1,3);
 //        System.out.println(tree_map.lastEntry());
 //        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
+//        ans.put(0.1,1);
 //        ans.put(tree_map.lastEntry().getKey(),tree_map.lastEntry().getValue());
+//        System.out.println(ans.firstEntry());
 //        ans.put(0.5,1);
 
 //       // algo.getGraph().removeNode(6);
