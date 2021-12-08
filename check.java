@@ -12,24 +12,47 @@ public class check {
         HashMap<Integer, HashSet<Integer>> intome= new HashMap<>();
         DirectedG g = new DirectedG();
         DirectedGAlgo algo= new DirectedGAlgo();
+
         algo.load("G1.json");
+        System.out.println(algo.shortestPathDist(16,4));
+      //  System.out.println(algo.shortestPath(0,11));
+//        for (int i = 0; i < algo.g1.vertix.size(); i++) {
+//            for (EdgeData e : algo.g1.edges.get(i).values()) {
+//                System.out.println(e +"   "+ e.getTag());
+//            }
+//        }
 //        System.out.println(algo.g1.nodeSize());
 //        System.out.println(algo.getGraph().edgeSize());
 //        System.out.println(algo.getGraph().getEdge(15,16));
 //        System.out.println(algo.shortestPathDist(2,12));
 //        System.out.println(algo.shortestPath(2,12));
-        TreeMap<Double, Integer> tree_map = new TreeMap<Double, Integer>();
-        tree_map.put(0.5,0);
-        tree_map.put(0.1,1);
-        tree_map.put(8.9,4);
-        tree_map.put(7.1,2);
-        tree_map.put(6.1,3);
-        System.out.println(tree_map.lastEntry());
-        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
-        ans.put(tree_map.lastEntry().getKey(),tree_map.lastEntry().getValue());
-        ans.put(0.5,1);
-        System.out.println(ans.firstEntry());
-        System.out.println(algo.center());
+       /* double[][] shortest_path = new double[algo.g1.vertix.size()][algo.g1.vertix.size()];
+        for (int i = 0; i < shortest_path.length; i++) {
+            for (int j = 0; j < shortest_path.length; j++) {
+                if(i!=j)
+                    shortest_path[i][j] = algo.shortestPathDist(i,j);
+            }
+        }*/
+//        List<NodeData> l =new LinkedList<>() ;
+//        int size  =algo.g1.vertix.size();
+//        for (int i = 0; i <size ; i++) {
+//            l.add(algo.g1.getNode(i));
+//        }
+//        //System.out.println(algo.getNextRoute(l));
+//       // double i = test.minCost(shortest_path);
+//        algo.save("");
+//        System.out.println(algo.g1.vertix.get(0).getLocation());
+//        TreeMap<Double, Integer> tree_map = new TreeMap<Double, Integer>();
+//        tree_map.put(0.5,0);
+//        tree_map.put(0.1,1);
+//        tree_map.put(8.9,4);
+//        tree_map.put(7.1,2);
+//        tree_map.put(6.1,3);
+//        System.out.println(tree_map.lastEntry());
+//        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
+//        ans.put(tree_map.lastEntry().getKey(),tree_map.lastEntry().getValue());
+//        ans.put(0.5,1);
+
 //       // algo.getGraph().removeNode(6);
 //        algo.getGraph().removeNode(7);
 //        System.out.println(algo.getGraph().edgeSize());

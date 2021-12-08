@@ -49,4 +49,9 @@ public class Edges implements EdgeData{
                  '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(Edges o) {
+        return 0;
+    }
 }

@@ -1,7 +1,7 @@
 package api;
 
 import com.google.gson.*;
-
+import org.json.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
@@ -41,7 +41,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return true;
     }
 
-    private void creat_list(int src , int dest){
+ /*   private void creat_list(int src , int dest){
         int curr = Integer.MAX_VALUE;
         this.shortestPath = new LinkedList<>();
         this.shortestPath.add(new Node(this.g1.vertix.get(dest).getKey(),this.g1.vertix.get(dest).getLocation()));
@@ -51,7 +51,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             this.shortestPath.add(new Node(this.g1.vertix.get(curr).getKey(),this.g1.vertix.get(curr).getLocation()));
             dest = curr;
         }
-    }
+    }*/
 
     @Override
     public double shortestPathDist(int src, int dest) {
@@ -59,7 +59,11 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         HashSet<Integer> helper = new HashSet<>();
         PriorityQueue<NodeData> queue= new PriorityQueue<>();
         Dijkstra(queue,helper,src,dest);
-        creat_list(src,dest);
+    //    creat_list(src,dest);
+//        for (NodeData e : this.g1.vertix.values()
+//        ) {
+//            System.out.println(e.getKey() + ": " + e.getTag());
+//        }
         return g1.vertix.get(dest).getWeight();
 
     }
@@ -69,26 +73,46 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             n.setWeight(Double.MAX_VALUE);
         }
         g1.vertix.get(src).setWeight(0.0);
-        queue.add(new Node(src,g1.vertix.get(src).getLocation()));
+        int curr_src=src;
+        int size = 0;
+        for (HashMap<Integer, EdgeData> id: g1.edges.values()) {
+            size += id.size();
+        }
 
-        while (helper.size() != g1.vertix.size()){
+        while (helper.size() != size){
+
+            if (curr_src != dest);{
+                g1.vertix.get(curr_src).setInfo("grey");}
+            for (EdgeData e:this.g1.edges.get(curr_src).values()) { //here vertix become gray
+
+                    if (e.getTag() !=1 && this.g1.vertix.get(e.getDest()).getInfo().equals("white")) {
+                        queue.add(e);
+                    }
+                    else if(this.g1.vertix.get(e.getDest()).getInfo().equals("grey")) {
+                        e.setTag(1);
+                        helper.add(e);
+                    }
+                }//creating a queue with all the edges from src vertix
+            //updating the weight of the poll one.
             if (queue.isEmpty()) return;
-            int t = queue.poll().getKey();
-
+            EdgeData t = queue.poll();
+            this.g1.vertix.get(t.getDest()).setWeight(this.g1.vertix.get(t.getSrc()).getWeight()+this.g1.edges.get(t.getSrc()).get(t.getDest()).getWeight());
+            t.setTag(1);
             if (helper.contains(t)) continue;
             helper.add(t);
-
             All_Neighbers(t,queue,helper,dest);
+            curr_src=t.getDest();
         }
 
     }
 
-    private void All_Neighbers(int t,PriorityQueue<NodeData> queue, HashSet<Integer> helper,int dest) {
+    private void All_Neighbers(EdgeData t,PriorityQueue<EdgeData> queue, HashSet<EdgeData> helper,int dest) {
         double weight_val=-1;
         double new_weight=-1;
-        int curr ;
-        for (EdgeData e : this.g1.edges.get(t).values()) {
-            if (!helper.contains(e.getDest()) && e.getDest() != dest ){
+        EdgeData curr ;
+        for (EdgeData e : queue) {
+            e.setTag(1);
+            if (!helper.contains(e) && e.getDest() != dest){
                 weight_val=e.getWeight();
                 new_weight= weight_val + this.g1.vertix.get(t).getWeight();
                 curr = t;
@@ -96,18 +120,25 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
                     this.g1.vertix.get(e.getDest()).set_Prev(curr);
                 }
-                queue.add(new Node(e.getDest(),g1.vertix.get(e.getDest()).getLocation()));
             }
+
             if (e.getDest()==dest){
                 weight_val=e.getWeight();
-                new_weight = weight_val + this.g1.vertix.get(t).getWeight();
+                new_weight = weight_val + this.g1.vertix.get(t.getSrc()).getWeight();
                 curr = t;
                 if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
-                    this.g1.vertix.get(e.getDest()).set_Prev(curr);
+                    this.g1.vertix.get(e.getDest()).set_Prev(curr.getSrc());
+                    e.setTag(1);
                 }
-
             }
+            boolean b= true;
+            for (Integer id :this.g1.intoNode.get(e.getSrc())) {
+                if (this.g1.edges.get(id).get(e.getSrc()).getTag() != 1)
+                    b=false;
+            }
+            if(b)
+                this.g1.vertix.get(e.getSrc()).setInfo("black");
         }
     }
 
@@ -125,16 +156,70 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return null;
     }
 
+    private void swap(List<NodeData> input, int a, int b) {
+        NodeData tmp = new Node( input.get(a).getKey(),input.get(a).getLocation());
+        input.set(a, input.get(b));
+        input.set(b, tmp);
+    }
+    public double getNextRoute(List<NodeData> elements){
+        double curr_sum = 0;
+        boolean hasNext = true;
+        while(hasNext) {
+            // System.out.println(elements);
+            for (int i = 0; i <elements.size()-1; i++) {
+                curr_sum += shortestPathDist(elements.get(i).getKey(),elements.get(i+1).getKey());
+            }
+            curr_sum += shortestPathDist(elements.get(elements.size()-1).getKey(),elements.get(0).getKey());
+            if (curr_sum<this.tsp) {
+                this.tsp = curr_sum;
+                System.out.println(curr_sum);
+            }
+            int k = 0, l = 0;
+            hasNext = false;
+            for (int i = elements.size() - 1; i > 0; i--) {
+                if (elements.get(i).getKey() >(elements.get(i - 1).getKey())) {
+                    k = i - 1;
+                    hasNext = true;
+                    break;
+                }
+            }
+
+            for (int i = elements.size() - 1; i > k; i--) {
+                if (elements.get(i).getKey()>elements.get(k).getKey()) {
+                    l = i;
+                    break;
+                }
+            }
+
+            swap(elements, k, l);
+            Collections.reverse(elements.subList(k + 1, elements.size()));
+        }
+        return this.tsp;
+    }
+
+
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+
+
+
+
+
+
+
         return null;
     }
 
     @Override
     public boolean save(String file) {
-        return false;
-    }
-
+        JSONObject json = new JSONObject(); //creates main json
+        try {
+            JSONObject valuesJson = new JSONObject(); //another object
+            valuesJson.put("Car", "Maruti");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return true;}
     @Override
     public boolean load(String file) {
         try {
@@ -184,6 +269,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             }
         }
     }
+
     private void SetTag0(){
         for (NodeData n:g1.vertix.values()) {
             n.setTag(0);
