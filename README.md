@@ -7,9 +7,9 @@ In this assignment we asked to build a graph from zero. The main goal of this pr
 In this assigment we implement classes such ass Nodes of a graph, vertixes and the most
 intersting part, the graph algorithms such as:  
 * Center
-*  TSP
-* -Dijkstra
-*-And a GUI interface of graph drawing 
+* TSP
+* Dijkstra
+* And a GUI interface of graph drawing 
 
 
 ##The GeoLocation class
@@ -70,6 +70,31 @@ The main veriables which we use in this class are:
 |Srting toString| with is we can actually see the edge information| O(1)
 
 
+## The Directed Weighted Graph class
+The main purpose of this section is to demonstarte how a graph is really look like.
+In addtion, in this class we creat a directed weighted graph using the Node class and the Edges class.
+We spent a lot of time to choose the best data structures to use in, at the end both of us understand that the best data structure is HashMap.
+
+The main veriables which we use in this class are:
+  - Vertix (HashMap type)
+    - Here we held all our nodes in HashMap data structure which the Key is the node's id and the Value is The 
+      is the node's data.
+  - Edges (HashMap of HashMaps type)
+    - Here we held all our edges in HashMap of HashMap data structure which the Key is the source id of the edge
+      and the value is HashMap which his Key is the destenation and the Value is the edge's data.
+  - IntoMe (HashMap of HashSet type)
+    - Here we held all the node's ids that have an edge in to me, the key here is the specific node's id, and the       value is HashSet of Integer which is a list of the nodes's ids which connected to me.    
+  
+    
+|Main Functions|Explenation|RunTime|
+|---|---|---|
+|DirectedG constructor | The main constuctor of new Graph, using the Node and Edges class|O(1)
+|Get Node| gives us the node's information with a given id|O(1)
+|Get Edge| gives us the Edge's information with a given src and dest(if this id's exsits)|O(1)
+|addNode| adding a new node to our data structure(if his id exsist)|O(1)
+|Connect| connect between 2 node's using their id's and create new edge in the graph|O(1)
+|Itrators function| The itrators functions that can be used to loop through collections| O(1)
+|removeNode| in this function we removing a node from our graph, when we do it we need to delet also all of the edges which fo to this node and from this node|O(n)
 
 
 
@@ -79,8 +104,10 @@ The main veriables which we use in this class are:
 
 
 
-Than we created the Edges of the graph which contain a basic information such as source dest and weight, and like
-the Node class we had few fields which helped us later.
+
+
+
+
 
 Next, we created our graph, to think about the data structure which will contain our information was a little bit 
 difficult, but we agreed that the best data structure is HashMap, one for the vertixes, and another HashMap special 
