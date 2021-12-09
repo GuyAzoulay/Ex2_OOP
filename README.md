@@ -120,7 +120,7 @@ The main veriables which we use in this class are:
 |shortestPath| in this function we use the previos function to check which of the nodes are in the shortest path
 ||using the List we created at first and add the right node every time| O(V^2+E)
 |center| in the center function we find the center of a graph (if it connected) using the shortestPathDist,
-for each node we check the max path to other node and take the maximum one, than we returned the shortest path between all of the nodes maximum path and take his node | need to complete
+||for each node we check the max path to other node and take the maximum one, than we returned the shortest path between all of the nodes maximum path and take his node | need to complete
 |load| this function loads the json file to our project|O(n)
 |save| saving the file of the graph|O(1)
 
