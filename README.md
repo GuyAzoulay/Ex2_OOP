@@ -2,10 +2,10 @@
 
 In this assignment we asked to build a graph from zero. including the graph vertixes, edges and the most
 intersting part, a graph algorithms such as:  
-'''
+```
 TSP
 Dijkstra
-'''
+```
 
 What first we built our vertixes as we asked for, every node contain a geographic location and special unique id
 and other fields which helped us in the algorythm implementaion.
