@@ -32,11 +32,11 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     public boolean isConnected() {
         for (NodeData n:this.g1.vertix.values()) {
             DFS(n.getKey());
-            for (NodeData n2:this.g1.vertix.values()) {
-                if(n2.getTag()==0) return false;
-            }
-            SetTag0();
         }
+        for (NodeData n2:this.g1.vertix.values()) {
+            if(n2.getTag()==0) return false;
+        }
+        SetTag0();
 
         return true;
     }
@@ -226,7 +226,21 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
 
-        return null;
+        if (!isConnected()) return null;
+        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
+        for (NodeData n1 : this.g1.vertix.values()) {
+            TreeMap<Double, Integer> tree_map = new TreeMap<Double, Integer>();
+            for (NodeData n2 : this.g1.vertix.values()) {
+                if(n1!=n2) {
+                    double w = shortestPathDist(n1.getKey(), n2.getKey());
+                    tree_map.put(w, n1.getKey());
+                    System.out.println(n1.getKey()+" "+n2.getKey()+": "+w);
+                }
+            }
+            ans.put(tree_map.lastEntry().getKey(), n1.getKey());
+        }
+        NodeData n= new Node(ans.firstEntry().getValue(),this.g1.vertix.get(ans.firstEntry().getValue()).getLocation());
+        return (List<NodeData>) n;
     }
 
     @Override
