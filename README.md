@@ -71,7 +71,7 @@ The main veriables which we use in this class are:
 
 
 ## The Directed Weighted Graph class
-The main purpose of this section is to demonstarte how a graph is really look like.
+The main purpose of this class is to demonstarte how a graph is really look like.
 In addtion, in this class we creat a directed weighted graph using the Node class and the Edges class.
 We spent a lot of time to choose the best data structures to use in, at the end both of us understand that the best data structure is HashMap.
 
@@ -99,7 +99,26 @@ The main veriables which we use in this class are:
 |nodeSize| gives us the amount of nodes in our graph|O(1)
 |edgeSize| gives us the number of edges in the graph|O(1)
 
-## The Directed Weighted  Algorythm Graph class
+## The Directed Weighted Algorythm Graph class
+The main purpose of this class is to implement known graph algorythms on the graph we was created,
+we spent a lot of time to try to make this algorythms efficient as much as we can, using known algorythms which help to solve thede problems like dijksta's algorythm.
+
+The main veriables which we use in this class are:
+  * Directed Weighted Graph (DirectedWeightedGraph type)
+    * here we have all of the graph information we built earlier.
+  * shortestpathlist (List type)
+    * this variable will help us to save the shortest path nodes 
+    
+|Main Functions|Explenation|RunTime|
+|---|---|---|
+|DirectedGAlgo constructor | The main constuctor of the Graph's algorythms, using the DirectedWeightedGraph  class|O(1)
+|init| initialize our graph|O(1)
+|GetGraph|gives us the graph's information|O(1)
+|Copy |creating a deep copy of the graph|O(1)
+|isConnected| this function check if a graph is strongly connected using the DFS method, this function is Boolean, we change our node's tag in the DFS function is there is a node with tag 0 we returned false|O(V +V*(V+E))
+|shortestPathDist| in this function i have used in the Dijksta algorythm to solve this problem, using a queue and set
+
+
 
 
 
