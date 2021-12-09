@@ -131,7 +131,7 @@ In this assigment we got 3 graph: G1, G2, G3. All of the graph are connected and
 ## Example for the Graph Analysis
 
 |Algorythm|Graph G1|Graph G2|Graph G3|
-|---|---|---|
+|---|---|---|---|
 |isConnected|True|True|True|
 |center|8|0|40|
 |ShortestPathDist for node 0 and node 8|7.43680|3.512|0.904|
@@ -144,6 +144,7 @@ In this assigment we got 3 graph: G1, G2, G3. All of the graph are connected and
  in the center function we check all of the shortest path for every node with all of the other nodes, this action  is very expensive one for a regular computer so it took a long time, in 10,000 vertix the program did it very very slow and we had to stop it after a big amount of time, 100,000 as well.
  
  [Kosaraju's algorithm](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm)
+ 
  [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
  
  
