@@ -6,11 +6,10 @@ In this assignment we asked to build a graph from zero. The main goal of this pr
 
 In this assigment we implement classes such ass Nodes of a graph, vertixes and the most
 intersting part, the graph algorithms such as:  
-
-   -Center
-   -TSP
-   -Dijkstra
-   -And a GUI interface of graph drawing 
+* Center
+*  TSP
+* -Dijkstra
+*-And a GUI interface of graph drawing 
 
 
 ##The GeoLocation class
