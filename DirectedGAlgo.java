@@ -8,7 +8,8 @@ import java.util.*;
 
 public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     DirectedG g1;
-
+    private List<NodeData> shortestPath;
+    private double tsp =Double.MAX_VALUE;
     public DirectedGAlgo(){
         this.g1= new DirectedG();
     }
@@ -66,8 +67,8 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     @Override
     public double shortestPathDist(int src, int dest) {
      //   if (!isConnected()) return -1.0;
-        HashSet<Integer> helper = new HashSet<>();
-        PriorityQueue<NodeData> queue= new PriorityQueue<>();
+        HashSet<EdgeData> helper = new HashSet<>();
+        Queue <EdgeData> queue= new LinkedList<>() ;
         Dijkstra(queue,helper,src,dest);
         double ans = g1.vertix.get(dest).getWeight();
         creat_list(src,dest);
@@ -75,10 +76,11 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return shortestDist(this.shortestPath);
 
     }
-    private void Dijkstra(PriorityQueue<NodeData> queue, HashSet<Integer> helper,int src, int dest ){
+    private void Dijkstra(Queue<EdgeData> queue, HashSet<EdgeData> helper,int src, int dest ){
 
-        for (NodeData n:this.g1.vertix.values()) {
+        for (NodeData n:this.g1.vertix.values()) { //updating the nodes weight to infinity
             n.setWeight(Double.MAX_VALUE);
+            n.setInfo("white");
         }
         g1.vertix.get(src).setWeight(0.0);
         int curr_src=src;
@@ -127,21 +129,22 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             e.setTag(1);
             if (!helper.contains(e) && e.getDest() != dest){
                 weight_val=e.getWeight();
-                new_weight= weight_val + this.g1.vertix.get(t).getWeight();
-                curr = t;
-                if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
-                    this.g1.vertix.get(e.getDest()).setWeight(new_weight);
-                    this.g1.vertix.get(e.getDest()).set_Prev(curr);
+                new_weight= weight_val + this.g1.vertix.get(e.getSrc()).getWeight(); //check
+                if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){//weight from src to current dest
+
+                    this.g1.vertix.get(e.getDest()).setWeight(new_weight); //updating the node weight
+                    this.g1.vertix.get(e.getDest()).set_Prev(e.getSrc());
+                    e.setTag(1);
                 }
             }
             if (e.getDest()==dest){
                 weight_val=e.getWeight();
-                new_weight = weight_val + this.g1.vertix.get(t.getSrc()).getWeight();
+                new_weight = weight_val + this.g1.vertix.get(e.getSrc()).getWeight();
                 curr = t;
                 if (new_weight < this.g1.vertix.get(e.getDest()).getWeight()){
 
                     this.g1.vertix.get(e.getDest()).setWeight(new_weight);
-                    this.g1.vertix.get(e.getDest()).set_Prev(curr.getSrc());
+                    this.g1.vertix.get(e.getDest()).set_Prev(e.getSrc());
                     e.setTag(1);
                 }
             }
@@ -308,5 +311,12 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             n.setInfo("white");
             n.setTag(0);
         }
+        for (HashMap<Integer, EdgeData> id: g1.edges.values()) {
+            for (EdgeData e : id.values()) {
+                e.setTag(0);
+            }
+        }
     }
+
 }
+
