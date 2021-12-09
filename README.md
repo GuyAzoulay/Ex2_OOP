@@ -111,24 +111,41 @@ The main veriables which we use in this class are:
     
 |Main Functions|Explenation|RunTime|
 |---|---|---|
-|DirectedGAlgo constructor | The main constuctor of the Graph's algorythms, using the DirectedWeightedGraph  class|O(1)
-|init| initialize our graph|O(1)
-|GetGraph|gives us the graph's information|O(1)
-|Copy |creating a deep copy of the graph|O(1)
-|isConnected| this function check if a graph is strongly connected using the DFS method and the Kosaraju algorythm, this function is Boolean, we change our node's tag in the DFS function is there is a node with tag 0 we returned false|O(V +V*(V+E))
-|shortestPathDist| in this function i have used in the Dijksta algorythm to solve this problem, using a queue and Set, first in the Dijkstra algo we update the node's weight to infinity and their color to white except the src node which we update to 0, than we ran on all of the vertixes an edges and update the node's weight to the min weight and return the destanation node's weight|O(V^2 +E)
+|DirectedGAlgo constructor | The main constuctor of the Graph's algorythms, using the DirectedWeightedGraph  class|O(1)|
+|init| initialize our graph|O(1)|
+|GetGraph|gives us the graph's information|O(1)|
+|Copy |creating a deep copy of the graph|O(1)|
+|isConnected| this function check if a graph is strongly connected using the DFS method and the Kosaraju algorythm, this function is Boolean, we change our node's tag in the DFS function is there is a node with tag 0 we returned false|O(V +V*(V+E))|
+|shortestPathDist| in this function i have used in the Dijksta algorythm to solve this problem, using a queue and Set, first in the Dijkstra algo we update the node's weight to infinity and their color to white except the src node which we update to 0, than we ran on all of the vertixes an edges and update the node's weight to the min weight and return the destanation node's weight|O(V^2 +E)|
 |shortestPath| in this function we use the previos function to check which of the nodes are in the shortest path
-||using the List we created at first and add the right node every time| O(V^2+E)
+||using the List we created at first and add the right node every time| O(V^2+E)|
 |center| in the center function we find the center of a graph (if it connected) using the shortestPathDist,
 ||for each node we check the max path to other node and take the maximum one, than we returned the shortest path between all of the nodes maximum path and take his node | need to complete
-|load| this function loads the json file to our project|O(n)
-|save| saving the file of the graph|O(1)
+|load| this function loads the json file to our project|O(n)|
+|save| saving the file of the graph|O(1)|
 
+## Analysis for given Graphs
+
+In this assigment we got 3 graph: G1, G2, G3. All of the graph are connected and we check some of the algorythm on them.
+
+## Example for the Graph Analysis
+
+|Algorythm|Graph G1|Graph G2|Graph G3|
+|---|---|---|
+|isConnected|True|True|True|
+|center|8|0|40|
+|ShortestPathDist for node 0 and node 8|7.43680|3.512|0.904|
+|ShortestPath for node 0 and node 3| 0->1->2->3|0->1->2->3|0->2->3|
 
  
+ ## Analysis for a large amount of node
+ In this assigment we asked to analyze what will happen in 1000, 10,000, 100,000 vertixes?
+ when we ran our code on a 1000 vertixes its took about 10 minutes to find the center of the graph, that because 
+ in the center function we check all of the shortest path for every node with all of the other nodes, this action  is very expensive one for a regular computer so it took a long time, in 10,000 vertix the program did it very very slow and we had to stop it after a big amount of time, 100,000 as well.
  
+ [Kosaraju's algorithm](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm)
+ [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
  
- [a link](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm)
  
  
  
