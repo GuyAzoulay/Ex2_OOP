@@ -33,12 +33,12 @@ public class check {
                     shortest_path[i][j] = algo.shortestPathDist(i,j);
             }
         }*/
-//        List<NodeData> l =new LinkedList<>() ;
-//        int size  =algo.g1.vertix.size();
-//        for (int i = 0; i <size ; i++) {
-//            l.add(algo.g1.getNode(i));
-//        }
-//        //System.out.println(algo.getNextRoute(l));
+        List<NodeData> l =new LinkedList<>() ;
+        int size  =algo.g1.vertix.size();
+        for (int i = 0; i <size ; i++) {
+            l.add(algo.g1.getNode(i));
+        }
+        algo.getNextRoute(l);
 //       // double i = test.minCost(shortest_path);
 //        algo.save("");
 //        System.out.println(algo.g1.vertix.get(0).getLocation());

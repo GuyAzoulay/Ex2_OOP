@@ -52,7 +52,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             this.shortestPath.add(new Node(this.g1.vertix.get(dest).getKey(),this.g1.vertix.get(dest).getLocation()));
         }
     }
-    private double helpme(List<NodeData> list){
+    private double shortestDist(List<NodeData> list){
         double ans = 0;
         for (int i = list.size()-1; i > 0 ; i--) {
             int src= list.get(i).getKey();
@@ -72,7 +72,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         double ans = g1.vertix.get(dest).getWeight();
         creat_list(src,dest);
         SetTag0();
-        return helpme(this.shortestPath);
+        return shortestDist(this.shortestPath);
 
     }
     private void Dijkstra(PriorityQueue<NodeData> queue, HashSet<Integer> helper,int src, int dest ){
@@ -174,15 +174,14 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         input.set(a, input.get(b));
         input.set(b, tmp);
     }
+
     public double getNextRoute(List<NodeData> elements){
-        double curr_sum = 0;
         boolean hasNext = true;
         while(hasNext) {
-            // System.out.println(elements);
+            double curr_sum = 0;
             for (int i = 0; i <elements.size()-1; i++) {
                 curr_sum += shortestPathDist(elements.get(i).getKey(),elements.get(i+1).getKey());
             }
-            curr_sum += shortestPathDist(elements.get(elements.size()-1).getKey(),elements.get(0).getKey());
             if (curr_sum<this.tsp) {
                 this.tsp = curr_sum;
                 System.out.println(curr_sum);
@@ -203,7 +202,6 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
                     break;
                 }
             }
-
             swap(elements, k, l);
             Collections.reverse(elements.subList(k + 1, elements.size()));
         }
@@ -213,12 +211,6 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-
-
-
-
-
-
 
         return null;
     }
@@ -270,7 +262,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             }
             return true;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("File doesn't exist, Do you?");
         }
         return false;
     } //v
