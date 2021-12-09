@@ -12,7 +12,7 @@ intersting part, the graph algorithms such as:
 * And a GUI interface of graph drawing 
 
 
-##The GeoLocation class
+## The GeoLocation class
 In this class we created new variable which gives us information about the geo location of 
 node.
 
@@ -95,6 +95,12 @@ The main veriables which we use in this class are:
 |Connect| connect between 2 node's using their id's and create new edge in the graph|O(1)
 |Itrators function| The itrators functions that can be used to loop through collections| O(1)
 |removeNode| in this function we removing a node from our graph, when we do it we need to delet also all of the edges which fo to this node and from this node|O(n)
+|removeEdge| here we remove an edge from our graph, we need to delet it from the Edges HashMap and the edges that go into me HashMap|O(1)
+|nodeSize| gives us the amount of nodes in our graph|O(1)
+|edgeSize| gives us the number of edges in the graph|O(1)
+
+## The Directed Weighted  Algorythm Graph class
+
 
 
 
