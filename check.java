@@ -14,8 +14,35 @@ public class check {
         DirectedGAlgo algo= new DirectedGAlgo();
 
         algo.load("G1.json");
-        System.out.println(algo.shortestPathDist(16,4));
-      //  System.out.println(algo.shortestPath(0,11));
+        System.out.println(algo.isConnected());
+        //System.out.println(algo.shortestPathDist(0,1));
+//        System.out.println(algo.shortestPathDist(0,2));
+//        System.out.println(algo.shortestPathDist(0,3));
+//        System.out.println(algo.shortestPathDist(0,4));
+   //     System.out.println(algo.tsp()
+       // System.out.println(algo.shortestPath(8,0));
+//        System.out.println(algo.shortestPath(6,0));
+//        System.out.println(algo.shortestPath(6,1));
+//        System.out.println(algo.shortestPath(6,2));
+//        System.out.println(algo.shortestPath(6,3));
+       // System.out.println(algo.shortestPathDist(6,4));
+     //   System.out.println(algo.shortestPath(6,4));
+
+//System.out.println(algo.shortestPath(6,5));
+//        System.out.println(algo.shortestPath(6,6));
+//        System.out.println(algo.shortestPath(6,7));
+//        System.out.println(algo.shortestPath(6,8));
+//        System.out.println(algo.shortestPath(6,9));
+//        System.out.println(algo.shortestPath(6,10));
+//        System.out.println(algo.shortestPath(6,11));
+//        System.out.println(algo.shortestPath(6,12));
+//        System.out.println(algo.shortestPath(6,13));
+//        System.out.println(algo.shortestPath(6,14));
+//        System.out.println(algo.shortestPath(6,15));
+        //System.out.println(algo.shortestPath(8,15));
+     //   System.out.println(algo.shortestPathDist(8,15));
+      //  System.out.println(algo.shortestPathDist(8,15));
+   //        System.out.println(algo.center());
 //        for (int i = 0; i < algo.g1.vertix.size(); i++) {
 //            for (EdgeData e : algo.g1.edges.get(i).values()) {
 //                System.out.println(e +"   "+ e.getTag());

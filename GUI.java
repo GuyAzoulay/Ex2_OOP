@@ -12,7 +12,8 @@ import java.util.Scanner;
 public class GUI extends JPanel implements ActionListener {
     private JFrame this_frame = new JFrame("My Graph");
     public DirectedGAlgo graph = new DirectedGAlgo();
-
+    private int[] scale_x;
+    private int[] scale_y;
     GUI(DirectedGAlgo g) {
         graph = g;
         JFrame frame = new JFrame("Graph Interface");
@@ -37,14 +38,15 @@ public class GUI extends JPanel implements ActionListener {
         shortestDist.addActionListener(this);
         MenuItem shortest_path = new MenuItem("Shortest Path");
         shortest_path.addActionListener(this);
+        MenuItem center = new MenuItem("Center");
+        center.addActionListener(this);
 
         algo.add(shortestDist);
         algo.add(shortest_path);
+        algo.add(center);
 
         MenuItem item3 = new MenuItem("Add vertex");
         item3.addActionListener(this);
-
-
 
 
         Container contPane = frame.getContentPane();
@@ -102,8 +104,9 @@ public class GUI extends JPanel implements ActionListener {
                             x_values[i] = graph.g1.vertix.get(i).getLocation().x();
                             y_values[i] = graph.g1.vertix.get(i).getLocation().y();
                         }
-                        int[] scale_x = scale(x_values, 0, 1000);
-                        int[] scale_y = scale(y_values, 0, 650);
+
+                        scale_x = scale(x_values, 0, 1000);
+                        scale_y = scale(y_values, 0, 650);
                         g.setFont(g.getFont().deriveFont(20.0F));
                         for (int i = 0; i < arr.length; i++) {
                             g.setColor(Color.blue);
@@ -133,14 +136,36 @@ public class GUI extends JPanel implements ActionListener {
                 int dest = Integer.parseInt(inputString2);
                 double path_dist= this.graph.shortestPathDist(src,dest);
                 JOptionPane.showMessageDialog(null, "The Shortest Distance to "+ dest +" from "+src+" is: " + path_dist);
+                break;
             }
+
             case "Shortest Path":{
                 String inputString1 = JOptionPane.showInputDialog(null, "Enter node source ID");
                 String inputString2 = JOptionPane.showInputDialog(null, "Enter node destination ID");
                 int src = Integer.parseInt(inputString1);
                 int dest = Integer.parseInt(inputString2);
-                LinkedList<NodeData> path_dist= (LinkedList<NodeData>) this.graph.shortestPath(src,dest);
-                JOptionPane.showMessageDialog(null, "The Shortest Distance to "+ dest +" from "+src+" is: " + path_dist);
+                LinkedList<NodeData> path= (LinkedList<NodeData>) this.graph.shortestPath(src,dest);
+                this_frame.add(new JPanel() {
+                    public void paintComponent(Graphics g) {
+                        g.setColor(Color.blue);
+                        for (int i = path.size()-1; i > 0; i--) {
+                            g.setColor(Color.blue);
+                            g.drawString(String.valueOf(i), scale_x[i] + 5, scale_y[i] + 20);
+                            Graphics2D line = (Graphics2D) g;
+                            line.setColor(Color.blue);
+                            line.setStroke(new BasicStroke(2));
+                            int src = path.get(i).getKey();
+                            int dest = path.get(i-1).getKey();
+                            line.drawLine(scale_x[src] + 20, scale_y[src] + 15, scale_x[dest] + 10, scale_y[dest]);
+                        }
+                    }
+                });
+                this_frame.setVisible(true);
+                break;
+            }
+
+            case "Center":{
+
             }
         }
     }

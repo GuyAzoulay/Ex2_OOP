@@ -1,6 +1,6 @@
 package api;
 
-public class Edges implements EdgeData{
+public class Edges implements EdgeData,Comparable<Edges>{
     int src,dest,tag;
     double weight;
     private String info;

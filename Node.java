@@ -2,7 +2,7 @@ package api;
 
 import java.util.HashMap;
 
-public class Node implements NodeData, Comparable<Node>{
+public class Node implements Comparable<Node>,NodeData{
     int key;
     private int tag;
     GeoLocation g1;
@@ -60,11 +60,11 @@ public class Node implements NodeData, Comparable<Node>{
 
     @Override
     public String toString() {
-        return "Node{" +
-                "key=" + key +
-                ", g1=" + g1 +
-                '\'' +
-                '}';
+        return "Node:  {" +
+                "key = " + key +
+                ", g1 = " + g1 +
+                '\n' +
+                  '}';
     }
 
     @Override
