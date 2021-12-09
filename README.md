@@ -128,10 +128,8 @@ The main veriables which we use in this class are:
  
  
  
+ [a link](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm)
  
  
  
  
- 
- Markup : [Go to Top](#Main goal of the Project)
-          section_title<a name="Main goal of the Project"></a>
