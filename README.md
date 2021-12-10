@@ -27,9 +27,9 @@ The main veriables which we use in this class are:
     - A variable which we used to detemine if we visited in a node.
   - Weight (double type)
     - A variable which held the weight of a node use int the edges weight.
-  -Info (String type)
+  - Info (String type)
     - A variable which we used in to set a fictional color to a node (white, gray and clack).
-  -Prev_Node (int type)
+  - Prev_Node (int type)
     - A variable which contain from which node's id i came from.
     
 |Main Functions|Explenation|RunTime|
@@ -47,15 +47,15 @@ The main veriables which we use in this class are:
 In this class we created a Edge which held a three main variables in it, The edge source, the edge destanation and the weight of a edge.
 
 The main veriables which we use in this class are:
-  -Src (int type)
+  - Src (int type)
     - A variable which held the node's id that we came from
-  -Dest (int type)
+  - Dest (int type)
     -A variable which held the node's id that we go to.
-  -Tag (int type)
+  - Tag (int type)
     - A variable which we used to detemine if we visited in a edge.
-  -Weight (double type)
+  - Weight (double type)
     - A variable which held the weight of a edge weight.
-  -Info (String type)
+  - Info (String type)
     - A variable which we used in to set a fictional way to say if i visited in this edge.
   
     
