@@ -50,7 +50,7 @@ The main veriables which we use in this class are:
   - Src (int type)
     - A variable which held the node's id that we came from
   - Dest (int type)
-    -A variable which held the node's id that we go to.
+    - A variable which held the node's id that we go to.
   - Tag (int type)
     - A variable which we used to detemine if we visited in a edge.
   - Weight (double type)
