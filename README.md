@@ -19,13 +19,13 @@ node.
 ## The Nodes class
 In this class we created a node which held a two main variables in it, The GeoLocation of a node and his id.
 The main veriables which we use in this class are:
-  -Key (int type)
+  - Key (int type)
     - A value which contain the id of the specific node.
-  -Geo Location ( class type)
+  - Geo Location ( class type)
     - A class which represent a node in the space.
-  -Tag (int type)
+  - Tag (int type)
     - A variable which we used to detemine if we visited in a node.
-  -Weight (double type)
+  - Weight (double type)
     - A variable which held the weight of a node use int the edges weight.
   -Info (String type)
     - A variable which we used in to set a fictional color to a node (white, gray and clack).
