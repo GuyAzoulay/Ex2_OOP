@@ -2,6 +2,8 @@ package api;
 
 public class GeoLoc implements GeoLocation {
     double x,y,z;
+
+    // a geoLocation constructor
     GeoLoc(double x,double y,double z){
         this.x = x;
         this.y = y;
@@ -19,6 +21,7 @@ public class GeoLoc implements GeoLocation {
         return this.z;
     }
 
+    // computing geographic distance location
     public double distance(GeoLocation g) {
         double nx= Math.pow(this.x-g.x(),2);
         double ny= Math.pow(this.y-g.y(),2);

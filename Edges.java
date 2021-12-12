@@ -1,10 +1,11 @@
 package api;
 
-public class Edges implements EdgeData,Comparable<Edges>{
+public class Edges implements EdgeData{
     int src,dest,tag;
     double weight;
     private String info;
 
+    //Edge Constructor
     public Edges(int src, int dest, double weight) {
         this.src = src;
         this.dest = dest;
@@ -12,6 +13,8 @@ public class Edges implements EdgeData,Comparable<Edges>{
 
     }
 
+
+    // getter and setter to all the Edges variables, including to String
     public int getSrc() {
         return this.src;
     }
@@ -48,10 +51,5 @@ public class Edges implements EdgeData,Comparable<Edges>{
                 ", weight=" + this.weight +
                  '\'' +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Edges o) {
-        return 0;
     }
 }

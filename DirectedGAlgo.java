@@ -1,18 +1,21 @@
 package api;
 
 import com.google.gson.*;
-import org.json.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     DirectedG g1;
-    private List<NodeData> shortestPath;
-    private double tsp =Double.MAX_VALUE;
+    private List<NodeData> shortestPath; // a variable which will help us in the shortestpath function
+
+    // Constructor for a new graph algo
     public DirectedGAlgo(){
         this.g1= new DirectedG();
     }
+
     @Override
     public void init(DirectedWeightedGraph g) {
         this.g1 = (DirectedG) g;
@@ -28,31 +31,43 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         DirectedG newG= this.g1;
         return newG;
     }
-
+    // in aim to check if graph is connected we ran on all the nodes, and using the DFS method
+    // and "coloring" these nodes, if one of the nodes after the DFS running is still "0"
+    // than the graph isn't connected
     @Override
     public boolean isConnected() {
         for (NodeData n:this.g1.vertix.values()) {
             DFS(n.getKey());
-        }
-        for (NodeData n2:this.g1.vertix.values()) {
-            if(n2.getTag()==0) return false;
+            for (NodeData n2:this.g1.vertix.values()) {
+                if(n2.getTag()==0) return false;
+            }
         }
         SetTag0();
 
         return true;
     }
 
+
+    //this method helps us to create the list that the shortestpath go through, we do it until the
+    // dest != src
     private void creat_list(int src , int dest){
+        Stack<NodeData> s = new Stack<>();
         int curr = Integer.MAX_VALUE;
         this.shortestPath = new LinkedList<>();
         this.shortestPath.add(new Node(this.g1.vertix.get(dest).getKey(),this.g1.vertix.get(dest).getLocation()));
         while(dest!=src){
-            //     System.out.println(dest);
             NodeData temp = this.g1.vertix.get(dest);
             dest = temp.get_Prev();
             this.shortestPath.add(new Node(this.g1.vertix.get(dest).getKey(),this.g1.vertix.get(dest).getLocation()));
         }
+        while(!this.shortestPath.isEmpty()){
+            s.add(this.shortestPath.remove(0));
+        }
+        while (!s.isEmpty()){
+            this.shortestPath.add(s.pop());
+        }
     }
+    //this function calculate the shortest dist after we activate some function on it.
     private double shortestDist(List<NodeData> list){
         double ans = 0;
         for (int i = list.size()-1; i > 0 ; i--) {
@@ -64,6 +79,8 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return ans;
     }
 
+
+    // this is the main function for the shortestpathDist computing
     @Override
     public double shortestPathDist(int src, int dest) {
         //   if (!isConnected()) return -1.0;
@@ -76,6 +93,11 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return shortestDist(this.shortestPath);
 
     }
+    // this is the known Dijkstra algo, in this algo, we ran on all the nodes
+    //and change their weight to infinity and their color to white.
+    // Then we start to run on all the edges in the graph and start looking
+    // the shortest path between 2 nodes, by that we're always updating the node weight,
+    // and at the end the dest node's weight will be with the shortest path distance.
     private void Dijkstra(Queue<EdgeData> queue, HashSet<EdgeData> helper,int src, int dest ){
 
         for (NodeData n:this.g1.vertix.values()) { //updating the nodes weight to infinity
@@ -120,7 +142,10 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         }
 
     }
-
+    //this function help to the Dijkstra algo to ran and compare between all the
+    // possible path, and always updating the node's weight.
+    // In addition, in this function we are "coloring" the nodes and the edges that
+    // we won't run on an edge twice and on a vertix more than twice.
     private void All_Neighbers(EdgeData t,Queue<EdgeData> queue, HashSet<EdgeData> helper,int dest) {
         double weight_val=-1;
         double new_weight=-1;
@@ -158,6 +183,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         }
     }
 
+    //this function shows us what is the shortest path we ran in a list of nodes
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
         if(this.shortestPath!=null){
@@ -167,6 +193,9 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return this.shortestPath;
     }
 
+    // this function finds the center of a graph, in aim to find the center
+    // of a graph, we are computing what is the max distance between node to all the
+    // other nodes, and then we are taking the min between all the max distances.
     @Override
     public NodeData center() {
         if (!isConnected()) return null;
@@ -186,78 +215,123 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         return n;
     }
 
-    private void swap(List<NodeData> input, int a, int b) {
-        NodeData tmp = new Node( input.get(a).getKey(),input.get(a).getLocation());
-        input.set(a, input.get(b));
-        input.set(b, tmp);
-    }
 
-    public double getNextRoute(List<NodeData> elements){
-        boolean hasNext = true;
-        while(hasNext) {
-            double curr_sum = 0;
-            for (int i = 0; i <elements.size()-1; i++) {
-                curr_sum += shortestPathDist(elements.get(i).getKey(),elements.get(i+1).getKey());
-            }
-            if (curr_sum<this.tsp) {
-                this.tsp = curr_sum;
-                System.out.println(curr_sum);
-            }
-            int k = 0, l = 0;
-            hasNext = false;
-            for (int i = elements.size() - 1; i > 0; i--) {
-                if (elements.get(i).getKey() >(elements.get(i - 1).getKey())) {
-                    k = i - 1;
-                    hasNext = true;
-                    break;
-                }
-            }
-
-            for (int i = elements.size() - 1; i > k; i--) {
-                if (elements.get(i).getKey()>elements.get(k).getKey()) {
-                    l = i;
-                    break;
-                }
-            }
-            swap(elements, k, l);
-            Collections.reverse(elements.subList(k + 1, elements.size()));
-        }
-        return this.tsp;
-    }
-
+    // this is a known algo which called TSP (travel SalesMan Problem)
+    // here we are going through a list of "cities" and need to find the shortest
+    // one that will "visited" in all this cities.
+    // first, we run on the graph to see if all the ids are in the cities list.
+    // and then we add all the possible paths into list of list.
+    // in the end we ran on all the possible paths and check which is the shortest between
+    // them.
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+        List<List<NodeData>> Paths = new LinkedList<>();
+        List<NodeData> result = new LinkedList<>();
 
-        if (!isConnected()) return null;
-        TreeMap<Double, Integer> ans = new TreeMap<Double, Integer>();
-        for (NodeData n1 : this.g1.vertix.values()) {
-            TreeMap<Double, Integer> tree_map = new TreeMap<Double, Integer>();
-            for (NodeData n2 : this.g1.vertix.values()) {
-                if(n1!=n2) {
-                    double w = shortestPathDist(n1.getKey(), n2.getKey());
-                    tree_map.put(w, n1.getKey());
-                    System.out.println(n1.getKey()+" "+n2.getKey()+": "+w);
+        for (NodeData city : cities){
+            if (!g1.getNodes().containsKey(city.getKey())) return null;
+        }
+
+        for (NodeData city : cities){
+            for (NodeData cityDest : cities){
+                if (city.getKey() == cityDest.getKey()) continue;
+                Paths.add(shortestPath(city.getKey(),cityDest.getKey()));
+            }
+        }
+
+        for (List<NodeData> notContainsAll : Paths){
+            for (List<NodeData> notContains2 : Paths){
+                if (!notContainsAll.containsAll(cities) && !notContains2.containsAll(cities)){
+                    if (notContains2.get(0).getKey() == notContainsAll.get(notContainsAll.size()-1).getKey() && notContainsAll.get(0).getKey() != notContains2.get(notContains2.size()-1).getKey()){
+                        for (NodeData node : notContains2){
+                            if (node.getKey()!= notContains2.get(0).getKey()) {
+                                notContainsAll.add(node);
+                            }
+                        }
+                    }
                 }
             }
-            ans.put(tree_map.lastEntry().getKey(), n1.getKey());
         }
-        NodeData n= new Node(ans.firstEntry().getValue(),this.g1.vertix.get(ans.firstEntry().getValue()).getLocation());
-        return (List<NodeData>) n;
+
+        double compare = Double.MAX_VALUE;
+        for (List<NodeData> listCheck : Paths) {
+            for (NodeData node : cities){
+                if (!listCheck.contains(node)) break;
+            }
+                if (pathWeight(listCheck) < compare) {
+                    result = listCheck;
+                    compare = pathWeight(listCheck);
+                }
+
+        }
+
+
+        return result;
     }
 
+    // a function which help to calculate the path weight
+    private double pathWeight(List<NodeData> nodes){
+        double result = 0;
+        Iterator<NodeData> src = nodes.iterator();
+        Iterator<NodeData> dst = nodes.iterator();
+        dst.next();
+        while (dst.hasNext()){
+            NodeData source = src.next();
+            NodeData dest = dst.next();
+            result += g1.getEdges().get(source.getKey()).get(dest.getKey()).getWeight();
+        }
+        return result;
+    }
+
+
+    // a method which save to a json file
     @Override
     public boolean save(String file) {
-        JSONObject json = new JSONObject(); //creates main json
-        try {
-            JSONObject valuesJson = new JSONObject(); //another object
-            valuesJson.put("Car", "Maruti");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        //This json object will be written to json file
+        JsonObject graph = new JsonObject();
+        String directory = "src/data/";
+        JsonArray nodeJ = new JsonArray();
+        JsonArray edgeJ = new JsonArray();
+        JsonObject node;
+        JsonObject edge;
+        Iterator<NodeData> iter = this.g1.nodeIter();
+        int i = 0;
+        while (iter.hasNext()) {
+            NodeData temp = iter.next();
+            node = new JsonObject();
+            node.addProperty("pos", temp.getLocation().x() + "," + temp.getLocation().y() + "," + temp.getLocation().z());
+            node.addProperty("id", i);
+            nodeJ.add(node);
+            Iterator<EdgeData> edgeIter = this.g1.edgeIter(i);
+            while (edgeIter != null && edgeIter.hasNext()) {
+                EdgeData edgeData = edgeIter.next();
+                edge = new JsonObject();
+                edge.addProperty("src", edgeData.getSrc());
+                edge.addProperty("dest", edgeData.getDest());
+                edge.addProperty("w", edgeData.getWeight());
+                edgeJ.add(edge);
+            }
+            i++;
         }
-        return true;}
+
+        graph.add("Edges", edgeJ);
+        graph.add("Nodes", nodeJ);
+
+        // Writing to the json file
+        try (FileWriter fileWriter = new FileWriter(directory + file)) {
+            fileWriter.write(String.valueOf(graph));
+            fileWriter.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //this function loads a json file into our project.
     @Override
     public boolean load(String file) {
+
         try {
             JsonElement fileElement = JsonParser.parseReader(new FileReader(file));
             JsonObject fileObject = fileElement.getAsJsonObject();
@@ -293,10 +367,12 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             }
             return true;
         } catch (FileNotFoundException e) {
-            System.err.println("File doesn't exist, Do you?");
+            System.err.println("File doesn't exist");
         }
         return false;
-    } //v
+    }
+
+    //the DFS function ran on all the nodes and "coloring" them.
     private void DFS(int vetrix){
         this.g1.getNode(vetrix).setTag(1);
         for (EdgeData e:this.g1.edges.get(vetrix).values()) {
@@ -306,6 +382,8 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
         }
     }
 
+    // in the end of every function we change the tag and info, we
+    // need to return it to the regular value.
     private void SetTag0(){
         for (NodeData n:g1.vertix.values()) {
             n.setInfo("white");
