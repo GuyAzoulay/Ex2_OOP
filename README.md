@@ -118,11 +118,12 @@ The main veriables which we use in this class are:
 |isConnected| this function check if a graph is strongly connected using the DFS method and the Kosaraju algorythm, this function is Boolean, we change our node's tag in the DFS function is there is a node with tag 0 we returned false|O(V +V*(V+E))|
 |shortestPathDist| in this function i have used in the Dijksta algorythm to solve this problem, using a queue and Set, first in the Dijkstra algo we update the node's weight to infinity and their color to white except the src node which we update to 0, than we ran on all of the vertixes an edges and update the node's weight to the min weight and return the destanation node's weight|O(V^2 +E)|
 |shortestPath| in this function we use the previos function to check which of the nodes are in the shortest path
-||using the List we created at first and add the right node every time| O(V^2+E)|
+||using the List we created at first and add the right node every time| O(V^3+E)|
 |center| in the center function we find the center of a graph (if it connected) using the shortestPathDist,
-||for each node we check the max path to other node and take the maximum one, than we returned the shortest path between all of the nodes maximum path and take his node | need to complete
+||for each node we check the max path to other node and take the maximum one, than we returned the shortest path between all of the nodes maximum path and take his node | O(V^4)
+|TSP| in a given list of cities we need to find the shortest path which contain all of them| --
 |load| this function loads the json file to our project|O(n)|
-|save| saving the file of the graph|O(1)|
+|save| saving the file of the graph|O(V*E)
 
 ## Analysis for given Graphs
 
@@ -147,7 +148,7 @@ In this assigment we got 3 graph: G1, G2, G3. All of the graph are connected and
  
   ### Things To Improve
     - Create tests during the project
-    - Divide more correctly our time between al the assigments
+    - Divide more correctly our time between all the assigments
   ### Thing To save
     - Deep learning of the problem space
     - A good Pre designed what we willing to do in that assigment
