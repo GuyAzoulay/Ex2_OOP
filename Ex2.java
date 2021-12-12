@@ -3,6 +3,7 @@ package api;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 /**
@@ -42,11 +43,10 @@ public class Ex2 {
         Scanner sc = new Scanner(System.in);
         DirectedGAlgo algo = new DirectedGAlgo();
         while (algo.g1.vertix.size()==0) {
-            System.out.println("Enter file name:");
-            String file_name = sc.nextLine();
+            String file_name = JOptionPane.showInputDialog(null, "Enter file name");
             algo.load(file_name);
         }
-            System.out.println("Graph loaded successfully");
-            GUI win = new GUI(algo);
+        JOptionPane.showMessageDialog(null, "Graph loaded successfully!");
+        GUI win = new GUI(algo);
     }
 }

@@ -2,20 +2,43 @@ package api;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 public class GUI extends JPanel implements ActionListener {
     private JFrame this_frame = new JFrame("My Graph");
     public DirectedGAlgo graph = new DirectedGAlgo();
+    private LinkedList<Double> x_values;
+    private LinkedList<Double> y_values;
     private LinkedList<Integer> scale_x;
     private LinkedList<Integer> scale_y;
+    private boolean mouseActive;
+    private MouseListener ms = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(mouseActive) {
+                int x = e.getX();
+                int y = e.getY();
+                scale_x.add(x);
+                scale_y.add(y);
+                double unscale_x = unScale(x, x_values, 10, 1000);
+                double unscale_y = unScale(y, y_values, 10, 650);
+                x_values.add(unscale_x);
+                y_values.add(unscale_y);
+                GeoLocation loc = new GeoLoc(x_values.getLast(),y_values.getLast(),0.0);
+                NodeData n = new Node(graph.g1.vertix.size(),loc);
+                graph.g1.addNode(n);
+                this_frame.getContentPane().removeAll();
+                this_frame.repaint();
+                this_frame.setVisible(true);
+                showGraph();
+                mouseActive = false;
+            }
+        }
+    };
+
     GUI(DirectedGAlgo g) {
         graph = g;
         JFrame frame = new JFrame("Graph Interface");
@@ -56,8 +79,19 @@ public class GUI extends JPanel implements ActionListener {
         algo.add(shortest_path);
         algo.add(center);
 
-        MenuItem item3 = new MenuItem("Add vertex");
-        item3.addActionListener(this);
+        MenuItem add_vertex = new MenuItem("Add Vertex");
+        add_vertex.addActionListener(this);
+        MenuItem connect = new MenuItem("Connect Vertexes");
+        connect.addActionListener(this);
+        MenuItem remove_edge = new MenuItem("Remove Edge");
+        remove_edge.addActionListener(this);
+        MenuItem remove_vertex = new MenuItem("Remove Vertex");
+        remove_vertex.addActionListener(this);
+
+        edit.add(add_vertex);
+        edit.add(connect);
+        edit.add(remove_edge);
+        edit.add(remove_vertex);
 
 
         Container contPane = frame.getContentPane();
@@ -71,10 +105,10 @@ public class GUI extends JPanel implements ActionListener {
 
         button.addActionListener(this);
         frame.setVisible(true);
-
+        this_frame.addMouseListener(this.ms);
         int size = graph.g1.vertix.size();
-        LinkedList<Double> x_values = new LinkedList<>();
-        LinkedList<Double> y_values = new LinkedList<>();
+         x_values = new LinkedList<>();
+         y_values = new LinkedList<>();
 
         for (int i = 0; i < size; i++) {
             x_values.add(graph.g1.vertix.get(i).getLocation().x());
@@ -91,8 +125,12 @@ public class GUI extends JPanel implements ActionListener {
             public void paintComponent(Graphics g2) {
                 g2.setFont(g2.getFont().deriveFont(16.0F));
                 Graphics2D g = (Graphics2D) g2;
-                for (int i = 0; i < scale_x.size(); i++) {
-                    g.drawString(String.valueOf(i), scale_x.get(i) + 5, scale_y.get(i) + 18);
+                Set<Integer> a = graph.g1.vertix.keySet();
+                Iterator <Integer>  data = a.iterator();
+
+                for (int i = 0; i < scale_x.size() && data.hasNext(); i++) {
+                    int temp = data.next();
+                    g.drawString(String.valueOf(temp), scale_x.get(i) + 5, scale_y.get(i) + 18);
                     g.setColor(Color.black);
                     g.setStroke(new BasicStroke(1));
                     g.drawArc(scale_x.get(i), scale_y.get(i), 20, 20, 0, 360);
@@ -150,6 +188,7 @@ public class GUI extends JPanel implements ActionListener {
                 this_frame.setResizable(false);
                 showGraph();
                 this_frame.setVisible(true);
+
                 break;
             }
 
@@ -209,19 +248,24 @@ public class GUI extends JPanel implements ActionListener {
 
             case "Center":{
                 NodeData center = this.graph.center();
-                JOptionPane.showMessageDialog(null, "The centered node is "+ center.getKey());
-                this_frame.add(new JPanel() {
-                    public void paintComponent(Graphics g) {
-                        int x = scale_x.get(center.getKey());
-                        int y = scale_y.get(center.getKey());
-                        g.setColor(Color.blue);
-                        Graphics2D g2 = (Graphics2D) g;
-                        g2.setColor(Color.red);
-                        g2.setStroke(new BasicStroke(2));
-                        g2.drawArc(x, y, 20, 20, 0, 360);
-                    }
-                });
-                this_frame.setVisible(true);
+                if(center!=null) {
+                    JOptionPane.showMessageDialog(null, "The centered node is " + center.getKey());
+                    this_frame.add(new JPanel() {
+                        public void paintComponent(Graphics g) {
+                            int x = scale_x.get(center.getKey());
+                            int y = scale_y.get(center.getKey());
+                            g.setColor(Color.blue);
+                            Graphics2D g2 = (Graphics2D) g;
+                            g2.setColor(Color.red);
+                            g2.setStroke(new BasicStroke(2));
+                            g2.drawArc(x, y, 20, 20, 0, 360);
+                        }
+                    });
+                    this_frame.setVisible(true);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "There's no center in an unconnected graph");
+                }
                 break;
             }
 
@@ -242,6 +286,26 @@ public class GUI extends JPanel implements ActionListener {
                 this_frame.getContentPane().removeAll();
                 this_frame.repaint();
                 this_frame.setVisible(true);
+                break;
+            }
+
+            case "Add Vertex":{
+                JOptionPane.showMessageDialog(null, "Press on the wanted location for the new Vertex");
+                mouseActive=true;
+                break;
+            }
+            case "Connect Vertexes":{
+
+                break;
+            }
+
+            case "Remove Edge":{
+
+                break;
+            }
+
+            case "Remove Vertex":{
+
                 break;
             }
         }
@@ -273,6 +337,13 @@ public class GUI extends JPanel implements ActionListener {
         }
         return scaled_values;
     }
+    private double unScale(int loc,LinkedList<Double> value, int start, int finish) {
+        double min = findMin(value);
+        double max = findMax(value);
+        double scaled_values = min + (loc-start)*(max-min)/(finish-start);
+        return scaled_values;
+    }
+
 
     private void drawArrowHead(Graphics2D g2,int x, int y, int endX, int endY) {
 
@@ -296,4 +367,5 @@ public class GUI extends JPanel implements ActionListener {
 
         g2.setTransform(tx1);
     }
+
 }
