@@ -1,4 +1,5 @@
 # Ex2_OOP
+* Written by Guy Azoulay and Yahalom Chasid.
 
 ## Main goal of the Project
 
