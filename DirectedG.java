@@ -1,28 +1,22 @@
 package api;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
+public class DirectedG implements DirectedWeightedGraph{
+    private int MC= 0;
+    HashMap<Integer,NodeData> vertix;
+    HashMap<Integer,HashMap<Integer,EdgeData>> edges; // First Integer is src second Integer is dest
+    HashMap<Integer,HashSet<Integer>> intoNode;
+    HashMap<Integer, Integer> scaled_x = new HashMap<>();
+    HashMap<Integer, Integer> scaled_y = new HashMap<>();
+    private int edgescount = 0;
 
-// in this class we implement what we have written so far (Nodes, GeoLocation, Edges)
-// into a graph, in here we choose that the best data structure to use in is HashMap
-
-public class DirectedG implements DirectedWeightedGraph {
-    private int MC = 0;
-    HashMap<Integer, NodeData> vertix; //represent the nodes
-    HashMap<Integer, HashMap<Integer, EdgeData>> edges; // First Integer is src second Integer is dest, represent the edges
-    HashMap<Integer, HashSet<Integer>> intoNode; // represent the edges id which came in to specific node
-
-    private int edgescount = 0; // variable which help us to save the number of edges
-
-    // constructor to Directed Weighted Graph
     public DirectedG() {
         this.vertix = new HashMap<Integer, NodeData>();
-        this.edges = new HashMap<Integer, HashMap<Integer, EdgeData>>();
-        this.intoNode = new HashMap<Integer, HashSet<Integer>>();
+        this.edges = new HashMap<Integer, HashMap<Integer,EdgeData>>();
+        this.intoNode = new HashMap<Integer,HashSet<Integer>>();
 
     }
-
 
     public NodeData getNode(int key) {
         return this.vertix.get(key);
@@ -30,39 +24,36 @@ public class DirectedG implements DirectedWeightedGraph {
     }
 
     public EdgeData getEdge(int src, int dest) {
-        if (getNode(src) != null && getNode(dest) != null) {
-            if (this.edges.get(src).get(dest) != null) {
+        if(getNode(src) != null && getNode(dest) != null){
+            if (this.edges.get(src).get(dest) != null){
                 return this.edges.get(src).get(dest);
             }
             return null;
         }
         return null;
     }
-
-    //adding a new node according to his keys
+        //adding a new node according to his keys
     public void addNode(NodeData n) {
-        if (this.vertix.containsKey(n.getKey())) return;
-        this.vertix.put(n.getKey(), n);
-        this.edges.put(n.getKey(), new HashMap<Integer, EdgeData>());
-        this.intoNode.put(n.getKey(), new HashSet<Integer>());
+        if( this.vertix.containsKey(n.getKey())) return;
+        this.vertix.put(n.getKey(),n);
+        this.edges.put(n.getKey(),new HashMap<Integer,EdgeData>());
+        this.intoNode.put(n.getKey(),new HashSet<Integer>());
         MC++;
     }
 
-    //connect between 2 id (keys) of nodes
-    // first, we check if the keys (id) are in the nodes list
-    // if so we create new edge and add it into the edges HashMap
-    // and into the intoNode HashMap
+        //connect between 2 id (keys) of nodes
     public void connect(int src, int dest, double w) {
-        if (this.vertix.containsKey(src) && this.vertix.containsKey(dest)) {
-            Edges e = new Edges(src, dest, w);
-            this.edges.get(src).put(dest, e);
+        if(this.vertix.containsKey(src) && this.vertix.containsKey(dest)){
+            Edges e= new Edges(src, dest,w);
+            this.edges.get(src).put(dest,e);
             this.intoNode.get(dest).add(src);
             MC++;
             edgescount++;
-        } else {
+        }
+        else {
             System.out.println("Invalid Values");
         }
-    }
+        }
 
 
     public Iterator<NodeData> nodeIter() {
@@ -77,36 +68,36 @@ public class DirectedG implements DirectedWeightedGraph {
         return this.edges.get(node_id).values().iterator();
     }
 
-
-    // when we are removing node we need to remove all the edges of this nodes
-    // we ran on all the node's edges and delete them.
     public NodeData removeNode(int key) {
-        if (this.vertix.containsKey(key)) {
-            NodeData n = this.vertix.get(key);
-            int edgeToDel = this.edges.get(key).size() + this.intoNode.get(key).size();   //number of all the edges which connect to nose
+        if (this.vertix.containsKey(key)){
+            NodeData n= this.vertix.get(key);
+            int edgeToDel=this.edges.get(key).size()+this.intoNode.get(key).size();   //number of all the edges which connect to nose
             this.vertix.remove(key);
-            this.edgescount -= edgeToDel;
-            for (Integer e : intoNode.get(key)) {
+            this.edgescount-=edgeToDel;
+            for (Integer e : intoNode.get(key)){
                 if (this.edges.get(e) != null) this.edges.get(e).remove(key);
-                removeEdge(e, key);
+                removeEdge(e,key);
             }
             this.edges.remove(key);
             this.intoNode.get(key).clear();
             this.intoNode.remove(key);
             MC++;
             return n;
-        } else {
-            System.out.println("No such key: " + key);
+        }
+        else {
+            System.out.println("No such key: "+ key);
         }
         return null;
     }
-    // removing edge from our graph
+
     public EdgeData removeEdge(int src, int dest) {
-        if (getEdge(src, dest) != null) {
+        if(getEdge(src,dest) != null){
 
-            this.intoNode.get(dest).remove(src); // self check if the edge has been deleted
+            System.out.println(this.intoNode.get(dest).remove(src)); // self check if the edge has been deleted
+            System.out.println(this.intoNode.get(dest).remove(src));
 
-            EdgeData e = this.edges.get(src).remove(dest);
+
+            EdgeData e=this.edges.get(src).remove(dest);
             System.out.println(e);
             this.edgescount--;
             MC++;
@@ -126,26 +117,4 @@ public class DirectedG implements DirectedWeightedGraph {
     public int getMC() {
         return MC;
     }
-    public boolean contain(NodeData n){
-        boolean flag= false;
-        if (n!=null){
-            flag=this.vertix.containsKey(n.getKey());
-        }
-        return flag;
-    }
-    //function which help us in the algo part.
-    public boolean contain(EdgeData e){
-        boolean flag= false;
-        if(e != null){
-            flag= this.edges.get(e.getSrc()).containsKey(e.getDest());
-        }
-        return flag;
-    }
-    public HashMap<Integer,NodeData> getNodes(){
-        return this.vertix;
-    }
-    public HashMap<Integer,HashMap<Integer,EdgeData>> getEdges(){
-        return this.edges;
-    }
-
 }

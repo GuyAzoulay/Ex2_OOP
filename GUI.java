@@ -28,8 +28,17 @@ public class GUI extends JPanel implements ActionListener {
                 x_values.add(unscale_x);
                 y_values.add(unscale_y);
                 GeoLocation loc = new GeoLoc(x_values.getLast(),y_values.getLast(),0.0);
-                NodeData n = new Node(graph.g1.vertix.size(),loc);
+                int id = 0;
+                for (int i = 0; i <graph.g1.vertix.size()+1 ; i++) {
+                    if(!graph.g1.vertix.containsKey(i)) {
+                        id = i;
+                        break;
+                    }
+                }
+                NodeData n = new Node(id,loc);
                 graph.g1.addNode(n);
+                graph.g1.scaled_x.put(id,x);
+                graph.g1.scaled_y.put(id,y);
                 this_frame.getContentPane().removeAll();
                 this_frame.repaint();
                 this_frame.setVisible(true);
@@ -42,9 +51,9 @@ public class GUI extends JPanel implements ActionListener {
     GUI(DirectedGAlgo g) {
         graph = g;
         JFrame frame = new JFrame("Graph Interface");
-        frame.setSize(700, 500);
+        frame.setSize(250, 180);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setResizable(false);
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Menu");
         Menu edit = new Menu("Edit");
@@ -115,8 +124,8 @@ public class GUI extends JPanel implements ActionListener {
             y_values.add(graph.g1.vertix.get(i).getLocation().y());
         }
 
-        scale_x = scale(x_values, 10, 1000);
-        scale_y = scale(y_values, 10, 650);
+        scale_x = scale(x_values, 10, 1000,1);
+        scale_y = scale(y_values, 10, 650,0);
     }
 
 
@@ -125,25 +134,35 @@ public class GUI extends JPanel implements ActionListener {
             public void paintComponent(Graphics g2) {
                 g2.setFont(g2.getFont().deriveFont(16.0F));
                 Graphics2D g = (Graphics2D) g2;
+                if(scale_x.size()!=graph.g1.vertix.size()){
+                    x_values= new LinkedList<>();
+                    y_values= new LinkedList<>();
+                    for (NodeData n: graph.g1.vertix.values()) {
+                        x_values.add(graph.g1.vertix.get(n.getKey()).getLocation().x());
+                        y_values.add(graph.g1.vertix.get(n.getKey()).getLocation().y());
+                    }
+                    graph.g1.scaled_x =new HashMap<>();
+                    graph.g1.scaled_y =new HashMap<>();
+                    scale_x = scale(x_values, 10, 1000,1);
+                    scale_y = scale(y_values, 10, 650,0);
+                }
                 Set<Integer> a = graph.g1.vertix.keySet();
                 Iterator <Integer>  data = a.iterator();
-
                 for (int i = 0; i < scale_x.size() && data.hasNext(); i++) {
                     int temp = data.next();
-                    g.drawString(String.valueOf(temp), scale_x.get(i) + 5, scale_y.get(i) + 18);
+                    g.drawString(String.valueOf(temp), graph.g1.scaled_x.get(temp) + 5, graph.g1.scaled_y.get(temp) + 18);
                     g.setColor(Color.black);
                     g.setStroke(new BasicStroke(1));
-                    g.drawArc(scale_x.get(i), scale_y.get(i), 20, 20, 0, 360);
+                    g.drawArc(graph.g1.scaled_x.get(temp), graph.g1.scaled_y.get(temp), 20, 20, 0, 360);
                 }
-
                 for (Integer src : graph.g1.edges.keySet()) {
                     for (Integer dest : graph.g1.edges.get(src).keySet()) {
                         g2.setColor(Color.green);
                         g.setStroke(new BasicStroke(2));
-                        g2.drawLine(scale_x.get(src) , scale_y.get(src) , scale_x.get(dest) , scale_y.get(dest));
-                        double endx = (scale_x.get(dest)+scale_x.get(src))/2;
-                        double endy = (scale_y.get(dest)+scale_y.get(src))/2;
-                        drawArrowHead(g,scale_x.get(src) , scale_y.get(src) ,(int)endx  , (int)endy);
+                        g2.drawLine(graph.g1.scaled_x.get(src) , graph.g1.scaled_y.get(src) , graph.g1.scaled_x.get(dest) , graph.g1.scaled_y.get(dest));
+                        double endx = (graph.g1.scaled_x.get(dest)+graph.g1.scaled_x.get(src))/2;
+                        double endy = (graph.g1.scaled_y.get(dest)+graph.g1.scaled_y.get(src))/2;
+                        drawArrowHead(g,graph.g1.scaled_x.get(src) , graph.g1.scaled_y.get(src) ,(int)endx  , (int)endy);
 
                     }
                 }
@@ -173,8 +192,8 @@ public class GUI extends JPanel implements ActionListener {
                         y_values.add(graph.g1.vertix.get(i).getLocation().y());
                     }
 
-                    scale_x = scale(x_values, 10, 1000);
-                    scale_y = scale(y_values, 10, 650);
+                    scale_x = scale(x_values, 10, 1000,1);
+                    scale_y = scale(y_values, 10, 650,0);
                     System.out.println("Graph loaded successfully");
                     break;
                 }
@@ -187,7 +206,7 @@ public class GUI extends JPanel implements ActionListener {
                 this_frame.setLocationRelativeTo(null);
                 this_frame.setResizable(false);
                 showGraph();
-                this_frame.setVisible(true);
+            //    this_frame.setVisible(true);
 
                 break;
             }
@@ -232,9 +251,9 @@ public class GUI extends JPanel implements ActionListener {
                                 int src = path.get(i).getKey();
                                 int dest = path.get(i - 1).getKey();
                                 g.drawLine(scale_x.get(src), scale_y.get(src), scale_x.get(dest), scale_y.get(dest));
-                                double endx = (scale_x.get(dest) + scale_x.get(src)) / 2;
-                                double endy = (scale_y.get(dest) + scale_y.get(src)) / 2;
-                                drawArrowHead((Graphics2D) g, scale_x.get(src), scale_y.get(src), (int) endx, (int) endy);
+                                double endx = (graph.g1.scaled_x.get(dest) + graph.g1.scaled_x.get(src)) / 2;
+                                double endy = (graph.g1.scaled_y.get(dest) + graph.g1.scaled_y.get(src)) / 2;
+                                drawArrowHead((Graphics2D) g, graph.g1.scaled_x.get(src), graph.g1.scaled_y.get(src), (int) endx, (int) endy);
                             }
                         }
                     });
@@ -294,18 +313,85 @@ public class GUI extends JPanel implements ActionListener {
                 mouseActive=true;
                 break;
             }
-            case "Connect Vertexes":{
 
+            case "Connect Vertexes": {
+                JTextField vertex1 = new JTextField();
+                JTextField vertex2 = new JTextField();
+                JTextField weight = new JTextField();
+                Object[] input = {
+                        "Vertex source:", vertex1,
+                        "Vertex destination:", vertex2,
+                        "Weight :", weight
+
+                };
+                int option = JOptionPane.showConfirmDialog(null, input, "Add Edge", JOptionPane.OK_CANCEL_OPTION);
+                if (option == JOptionPane.OK_OPTION) {
+                    try{
+                        int id1 = Integer.parseInt(vertex1.getText());
+                        int id2 = Integer.parseInt(vertex2.getText());
+                        double wght = Double.parseDouble(weight.getText());
+                        graph.g1.connect(id1,id2,wght);
+                        this_frame.getContentPane().removeAll();
+                        this_frame.repaint();
+                        this_frame.setVisible(true);
+                        showGraph();
+                    }
+                    catch (Exception e){
+                        JOptionPane.showMessageDialog(null, "Error, please enter only numeric values and correct ID's");
+                    }
+                }
                 break;
             }
 
             case "Remove Edge":{
+                JTextField vertex1 = new JTextField();
+                JTextField vertex2 = new JTextField();
+                Object[] input = {
+                        "Vertex source:", vertex1,
+                        "Vertex destination:", vertex2,
 
+                };
+                int option = JOptionPane.showConfirmDialog(null, input, "Remove Edge", JOptionPane.OK_CANCEL_OPTION);
+                if (option == JOptionPane.OK_OPTION) {
+                    try {
+                        int id1 = Integer.parseInt(vertex1.getText());
+                        int id2 = Integer.parseInt(vertex2.getText());
+                        if (graph.g1.edges.get(id1).remove(id2)!=null){
+                            JOptionPane.showMessageDialog(null, "Edge deleted successfully");}
+                        else{
+                            JOptionPane.showMessageDialog(null, "No Edge between given vertexes");}
+                        this_frame.getContentPane().removeAll();
+                        this_frame.repaint();
+                        this_frame.setVisible(true);
+                        showGraph();
+                    }
+                    catch (Exception e){
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values");
+                    }
+                }
                 break;
             }
 
             case "Remove Vertex":{
+                String id = JOptionPane.showInputDialog(null, "Enter vertex ID to delete");
+                try{
+                    int delete = Integer.parseInt(id);
 
+                    if (graph.g1.removeNode(delete)!=null){
+                        graph.g1.scaled_x.remove(delete);
+                        graph.g1.scaled_y.remove(delete);
+                        JOptionPane.showMessageDialog(null, "Vertex deleted successfully");
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "ID doesn't exists");}
+                    this_frame.getContentPane().removeAll();
+                    this_frame.repaint();
+                    this_frame.setVisible(true);
+                    showGraph();
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Please enter valid id");
+                }
                 break;
             }
         }
@@ -328,12 +414,19 @@ public class GUI extends JPanel implements ActionListener {
         return max;
     }
 
-    private LinkedList<Integer> scale(LinkedList<Double> value, int start, int finish) {
+    private LinkedList<Integer> scale(LinkedList<Double> value, int start, int finish,int k) {
         LinkedList<Integer> scaled_values = new LinkedList<>();
         double min = findMin(value);
         double max = findMax(value);
+        Iterator<Integer> id = graph.g1.vertix.keySet().iterator();
         for (int i = 0; i < value.size(); i++) {
-            scaled_values.add((int) ((value.get(i) - min) * (finish - start) / (max - min) + start));
+            int curr = (int) ((value.get(i) - min) * (finish - start) / (max - min) + start);
+            scaled_values.add(curr);
+            if(k==1)
+                graph.g1.scaled_x.put(id.next(), curr);
+            else
+                graph.g1.scaled_y.put(id.next(), curr);
+
         }
         return scaled_values;
     }
