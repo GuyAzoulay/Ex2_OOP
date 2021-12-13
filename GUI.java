@@ -82,7 +82,10 @@ public class GUI extends JPanel implements ActionListener {
         shortest_path.addActionListener(this);
         MenuItem center = new MenuItem("Center");
         center.addActionListener(this);
+        MenuItem tsp = new MenuItem("TSP");
+        tsp.addActionListener(this);
 
+        algo.add(tsp);
         algo.add(isConnected);
         algo.add(shortestDist);
         algo.add(shortest_path);
@@ -251,7 +254,7 @@ public class GUI extends JPanel implements ActionListener {
                                 line.setStroke(new BasicStroke(2));
                                 int src = path.get(i).getKey();
                                 int dest = path.get(i - 1).getKey();
-                                g.drawLine(scale_x.get(src), scale_y.get(src), scale_x.get(dest), scale_y.get(dest));
+                                line.drawLine(graph.g1.scaled_x.get(src) , graph.g1.scaled_y.get(src) , graph.g1.scaled_x.get(dest) , graph.g1.scaled_y.get(dest) );
                                 double endx = (graph.g1.scaled_x.get(dest) + graph.g1.scaled_x.get(src)) / 2;
                                 double endy = (graph.g1.scaled_y.get(dest) + graph.g1.scaled_y.get(src)) / 2;
                                 drawArrowHead((Graphics2D) g, graph.g1.scaled_x.get(src), graph.g1.scaled_y.get(src), (int) endx, (int) endy);
@@ -396,7 +399,55 @@ public class GUI extends JPanel implements ActionListener {
                 }
                 break;
             }
+
+            case "TSP": {
+                LinkedList<NodeData> list = new LinkedList<>();
+                int option = JOptionPane.OK_OPTION;
+                while (option == JOptionPane.OK_OPTION) {
+                    String inputString1 = JOptionPane.showInputDialog(null, "Enter vertex ID");
+                    try {
+                        int id = Integer.parseInt(inputString1);
+                        if (graph.g1.vertix.containsKey(id) && !list.contains(graph.g1.getNode(id))) {
+                            list.add(graph.g1.getNode(id));
+                        } else if (list.contains(graph.g1.getNode(id))) {
+                            JOptionPane.showMessageDialog(null, "Enter only new ID");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Enter only valid ID's");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values");
+                    }
+                    option = JOptionPane.showConfirmDialog(null, "Would you like to add more cities?", "Continue", JOptionPane.OK_CANCEL_OPTION);
+                }
+                LinkedList<NodeData> route = (LinkedList<NodeData>) graph.tsp(list);
+                String ans = "";
+                for (int i = 0; i < route.size(); i++) {
+                    ans += route.get(i).getKey() + " -> ";
+                }
+                JOptionPane.showMessageDialog(null, "The Shortest Path is: " + ans);
+                showGraph();
+                this_frame.add(new JPanel() {
+                    public void paintComponent(Graphics g) {
+                        g.setColor(Color.blue);
+                        for (int i = route.size() - 1; i > 0; i--) {
+                            Graphics2D line = (Graphics2D) g;
+                            line.setColor(Color.blue);
+                            line.setStroke(new BasicStroke(2));
+                            int src = route.get(i).getKey();
+                            int dest = route.get(i - 1).getKey();
+                            line.drawLine(graph.g1.scaled_x.get(src) , graph.g1.scaled_y.get(src) , graph.g1.scaled_x.get(dest) , graph.g1.scaled_y.get(dest) );
+                            double endx = (graph.g1.scaled_x.get(dest) + graph.g1.scaled_x.get(src)) / 2;
+                            double endy = (graph.g1.scaled_y.get(dest) + graph.g1.scaled_y.get(src)) / 2;
+                            drawArrowHead((Graphics2D) g, graph.g1.scaled_x.get(src), graph.g1.scaled_y.get(src), (int) endx, (int) endy);
+                        }
+                    }
+                });
+                this_frame.setVisible(true);
+
+            }
         }
+
+
     }
     private double findMin(LinkedList<Double> list) {
         double min = Double.MAX_VALUE;
