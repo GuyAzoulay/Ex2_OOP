@@ -186,10 +186,11 @@ public class GUI extends JPanel implements ActionListener {
                     int size = graph.g1.vertix.size();
                     LinkedList<Double> x_values = new LinkedList<>();
                     LinkedList<Double> y_values = new LinkedList<>();
-
+                    Iterator<Integer> iter = graph.g1.vertix.keySet().iterator();
                     for (int i = 0; i < size; i++) {
-                        x_values.add(graph.g1.vertix.get(i).getLocation().x());
-                        y_values.add(graph.g1.vertix.get(i).getLocation().y());
+                        int temp = iter.next();
+                        x_values.add(graph.g1.vertix.get(temp).getLocation().x());
+                        y_values.add(graph.g1.vertix.get(temp).getLocation().y());
                     }
 
                     scale_x = scale(x_values, 10, 1000,1);
@@ -298,7 +299,8 @@ public class GUI extends JPanel implements ActionListener {
             }
 
             case "Save Graph":{
-                break;
+                String inputString1 = JOptionPane.showInputDialog(null, "Enter File name:");
+                this.graph.save(inputString1);
             }
 
             case "Clean Graph": {
