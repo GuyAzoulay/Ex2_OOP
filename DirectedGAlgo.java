@@ -290,7 +290,7 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
     public boolean save(String file) {
         //This json object will be written to json file
         JsonObject graph = new JsonObject();
-        String directory = "src/data/";
+        String directory = "";
         JsonArray nodeJ = new JsonArray();
         JsonArray edgeJ = new JsonArray();
         JsonObject node;
@@ -301,9 +301,9 @@ public class DirectedGAlgo implements DirectedWeightedGraphAlgorithms{
             NodeData temp = iter.next();
             node = new JsonObject();
             node.addProperty("pos", temp.getLocation().x() + "," + temp.getLocation().y() + "," + temp.getLocation().z());
-            node.addProperty("id", i);
+            node.addProperty("id", temp.getKey());
             nodeJ.add(node);
-            Iterator<EdgeData> edgeIter = this.g1.edgeIter(i);
+            Iterator<EdgeData> edgeIter = this.g1.edgeIter(temp.getKey());
             while (edgeIter != null && edgeIter.hasNext()) {
                 EdgeData edgeData = edgeIter.next();
                 edge = new JsonObject();
